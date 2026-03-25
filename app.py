@@ -4,6 +4,7 @@ import streamlit as st
 import numpy as np
 import pandas as pd
 import torch
+import streamlit.components.v1 as components
 
 st.set_page_config(
     page_title="Detección de Objetos en Tiempo Real",
@@ -21,8 +22,12 @@ def load_model():
         st.error(f"❌ Error al cargar el modelo: {str(e)}")
         return None
 
-st.title("🔍 Detección de Objetos en Imágenes")
-st.markdown("Esta aplicación utiliza YOLOv5 para detectar objetos en imágenes capturadas con tu cámara.")
+st.title("🔍 Detección de Objetos en Imágenes y Clasificación")
+st.markdown("Esta aplicación utiliza YOLOv5 para detectar objetos en imágenes y Teachable Machine para clasificar imágenes en tiempo real.")
+
+tab1, tab2 = st.tabs(["Detección de Objetos", "Clasificación de Imágenes"])
+
+with tab1:
 
 with st.spinner("Cargando modelo YOLOv5..."):
     model = load_model()
