@@ -16,18 +16,14 @@ st.set_page_config(
 def load_model():
     try:
         from ultralytics import YOLO
-        model = YOLO("yolov5su.pt")
+        model = YOLO("yolov5s.pt")
         return model
     except Exception as e:
         st.error(f"❌ Error al cargar el modelo: {str(e)}")
         return None
 
-st.title("🔍 Detección de Objetos en Imágenes y Clasificación")
-st.markdown("Esta aplicación utiliza YOLOv5 para detectar objetos en imágenes y Teachable Machine para clasificar imágenes en tiempo real.")
-
-tab1, tab2 = st.tabs(["Detección de Objetos", "Clasificación de Imágenes"])
-
-with tab1:
+st.title("🔍 Detección de Objetos en Imágenes")
+st.markdown("Esta aplicación utiliza YOLOv5 para detectar objetos en imágenes tomadas con la cámara.")
 
 with st.spinner("Cargando modelo YOLOv5..."):
     model = load_model()
@@ -45,14 +41,9 @@ if model:
     if picture:
         bytes_data = picture.getvalue()
 
-        # Decodificar con Pillow en lugar de cv2 (evita dependencia libGL)
-        #pil_img  = Image.open(io.BytesIO(bytes_data)).convert("RGB")
-        #np_img   = np.array(pil_img)   # array RGB
-
         pil_img = Image.open(io.BytesIO(bytes_data)).convert("RGB")
         np_img  = np.array(pil_img)[..., ::-1]  # RGB → BGR para que YOLO procese bien
 
-        
         with st.spinner("Detectando objetos..."):
             try:
                 results = model(
